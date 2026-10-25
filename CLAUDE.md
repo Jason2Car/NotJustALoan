@@ -73,7 +73,7 @@ src/types.ts            All domain types: User, Group, Commitment, Message,
 src/rules.ts            PURE business rules: lifecycle gates (advanceChecks/
                         canAdvance/nextState), commitmentFullyAccepted,
                         resetAcks, leaveKind, lenderFit, incomeVisibleTo,
-                        sharedGroup, commitmentsEffective, arrangement
+                        canViewHistory, commitmentsEffective, arrangement
                         labels/explainers, and My Finances math (budgetSummary,
                         scenarioSummary, loanEstimate). No side effects.
 src/actions.ts          All state mutations; enforces rules.ts. UI never
@@ -138,8 +138,10 @@ weaken them:
   flow must show exactly what will be shared before consent.
 - **No trust/credit score.** Ever. Present factual, contextual records
   (completed / late / delayed-explained / renegotiated / unresolved / disputed)
-  that the subject can respond to and dispute. Records are visible to members
-  of a group the subject shares and cannot be hidden from group members. Lack of
+  that the subject can respond to and dispute. Past transactions are visible
+  to any signed-in member (`canViewHistory`) — including newcomers who share
+  no group with the subject — and cannot be hidden. This visibility covers
+  history only: income and budgets (financial reports) stay private as above. Lack of
   history ≠ untrustworthy; simulated verification ≠ financial reliability;
   completing small commitments ≠ ability to repay a large loan; a missed
   payment is not misconduct. No permanent public shaming or good/bad labels.

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as A from '../actions';
 import { Avatar, money, Notice, VerifBadge } from '../components/ui';
-import { sharedGroup } from '../rules';
+import { canViewHistory } from '../rules';
 import { useStore } from '../store';
 import type { RecordKind } from '../types';
 
@@ -17,9 +17,7 @@ export default function Profile({ id }: { id: string }) {
   const [resp, setResp] = useState<Record<string, string>>({});
   if (!u) return <p>Profile not found.</p>;
   const mine = u.id === me;
-  const groups = Object.values(state.groups);
-  const allowed = mine || sharedGroup(groups, me, u.id);
-  const visible = mine || allowed ? u.records : [];
+  const visible = canViewHistory(me) ? u.records : [];
   const act = (fn: (d: typeof state) => void) => update(fn);
 
   return (
@@ -47,9 +45,8 @@ export default function Profile({ id }: { id: string }) {
 
       <section>
         <h2>Commitment history</h2>
-        <Notice>No score and no ranking. These are individual events with context, visible to members of groups you share — they can't be hidden from group members, but you can respond to or dispute any record about you. A record about a small commitment doesn't show someone can repay a large loan.</Notice>
-        {!mine && !allowed && <p className="muted">You can see records after you share a group with this person.</p>}
-        {allowed && !visible.length && <p className="muted">No records yet.</p>}
+        <Notice>No score and no ranking. These are individual events with context, visible to everyone in the community — including newcomers, before you share a group — and they can't be hidden, but the subject can respond to or dispute any record. Income and budgets stay private and are never shown here. A record about a small commitment doesn't show someone can repay a large loan.</Notice>
+        {!visible.length && <p className="muted">No records yet.</p>}
         {visible.map((r) => (
           <article key={r.id} className={`card record k-${r.kind}`}>
             <div className="row between"><strong>{r.title}</strong><span className="badge">{KIND[r.kind]}</span></div>

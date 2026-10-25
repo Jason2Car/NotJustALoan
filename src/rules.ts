@@ -106,9 +106,14 @@ export function incomeVisibleTo(subject: User, viewerId: string | null, group: G
   return !!group && subject.sharedIncomeWith.includes(group.id) && isMember(group, viewerId);
 }
 
-/** Records are visible to the subject and to members of a group they share. There is no per-record hiding. */
-export function sharedGroup(groups: Group[], a: string, b: string) {
-  return groups.some((g) => g.memberIds.includes(a) && g.memberIds.includes(b));
+/**
+ * Past transactions (commitment history) are visible to any signed-in member,
+ * including newcomers who share no group with the subject. There is no
+ * per-record hiding. Financial reports stay private: income uses
+ * incomeVisibleTo above, and budgets are only ever shown to their owner.
+ */
+export function canViewHistory(viewerId: string | null) {
+  return !!viewerId;
 }
 
 // ---- My Finances: deterministic budget math (never AI-generated) ----

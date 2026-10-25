@@ -51,7 +51,7 @@ Each group states its financing arrangement — **A** individual loans coordinat
 - Joining, voting, or proposing never creates liability. Only a person's own action sets their acknowledgment.
 - Any membership, rule, commitment, or financing-arrangement change resets acknowledgments.
 - Budgets are private to their owner; borrowed money is never counted as income, and only the user's own obligation is counted.
-- No trust score. Records are contextual, visible to members of a shared group (they cannot be hidden from group members), and can be responded to and disputed.
+- No trust score. Records (past transactions) are contextual and visible to any signed-in member, including newcomers who share no group with the person — they cannot be hidden, and can be responded to and disputed. Income and budgets stay private.
 - Lender fit is descriptive, never a prediction of approval.
 
 ## Not implemented

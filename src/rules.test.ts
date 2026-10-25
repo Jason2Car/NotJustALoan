@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import * as A from './actions';
-import { advanceChecks, canAdvance, commitmentFullyAccepted, incomeVisibleTo, leaveKind } from './rules';
+import { advanceChecks, canAdvance, canViewHistory, commitmentFullyAccepted, incomeVisibleTo, leaveKind } from './rules';
 import { seedState } from './seed';
 
 const as = (s: ReturnType<typeof seedState>, id: string) => { s.currentUserId = id; };
@@ -52,5 +52,14 @@ describe('consent and liability rules', () => {
     as(s, 'u-maya'); A.setIncomeShare(s, 'g-cart', true);
     expect(incomeVisibleTo(s.users['u-maya'], 'u-lena', g)).toBe(true);
     expect(incomeVisibleTo(s.users['u-maya'], 'u-lena', s.groups['g-oven'])).toBe(false);
+  });
+  it('history is visible to a newcomer with no shared group, while income stays private', () => {
+    const s = seedState();
+    // u-omar shares no group with u-maya, yet can view her past transactions
+    expect(canViewHistory('u-omar')).toBe(true);
+    expect(canViewHistory(null)).toBe(false);
+    expect(s.users['u-maya'].records.length).toBeGreaterThan(0);
+    // ...but her income and budget are not visible to him
+    expect(incomeVisibleTo(s.users['u-maya'], 'u-omar', null)).toBe(false);
   });
 });
